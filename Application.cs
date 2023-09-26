@@ -17,7 +17,7 @@ public class Application : ExternalApplication
     {
         var panel = Application.CreatePanel("Panel name", "Eneca");
 
-        var showButton = panel.AddPushButton<TestCommand>("Spaces Manager");
+        var showButton = panel.AddPushButton<TestCommand>("Spaces\nManager");
         showButton.SetImage("/Eneca.SpacesManager;component/Resources/Icons/RibbonIcon16.png");
         showButton.SetLargeImage("/Eneca.SpacesManager;component/Resources/Icons/RibbonIcon32.png");
     }

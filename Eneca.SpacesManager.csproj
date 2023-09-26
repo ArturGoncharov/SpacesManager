@@ -69,29 +69,29 @@
 	    <Reference Include="System.ComponentModel.DataAnnotations" />
 	    <Using Include="Nice3point.Revit.Extensions" />
 	    <Using Include="JetBrains.Annotations" />
-		<Resource Include="Resources\Icons\RibbonIcon16.png"/>
-        <Resource Include="Resources\Icons\RibbonIcon32.png"/>
+		<Resource Include="Resources\Icons\RibbonIcon16.png" />
+        <Resource Include="Resources\Icons\RibbonIcon32.png" />
     </ItemGroup>
-    <!--<Target Name="CopyFiles" AfterTargets="CoreBuild">
+    <Target Name="CopyFiles" AfterTargets="CoreBuild">
 		<ItemGroup>
 			<RootItem Include="$(ProjectDir)*.addin" />
-            <AddinItem Include="$(TargetDir)\**\*.*" Exclude="$(TargetDir)*.pdb;$(TargetDir)*.config"/>
+            <AddinItem Include="$(TargetDir)\**\*.*" Exclude="$(TargetDir)*.pdb;$(TargetDir)*.config" />
 		</ItemGroup>
 
-		<Copy SourceFiles="@(RootItem)" DestinationFolder="$(ProgramData)\Autodesk\Revit\Addins\$(RevitVersion)" Condition="$(Configuration.Contains('Debug'))" OverwriteReadOnlyFiles="false"/>
-		<Copy SourceFiles="@(AddinItem)" DestinationFolder="$(ProgramData)\Autodesk\Revit\Addins\$(RevitVersion)\Eneca\$(SolutionName)\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" OverwriteReadOnlyFiles="false"/>
-	</Target>-->
+		<Copy SourceFiles="@(RootItem)" DestinationFolder="$(ProgramData)\Autodesk\Revit\Addins\$(RevitVersion)" Condition="$(Configuration.Contains('Debug'))" OverwriteReadOnlyFiles="false" />
+		<Copy SourceFiles="@(AddinItem)" DestinationFolder="$(ProgramData)\Autodesk\Revit\Addins\$(RevitVersion)\Eneca\$(SolutionName)\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" OverwriteReadOnlyFiles="false" />
+	</Target>
 
 	
 
 	<!--TODO: Update and uncomment this information-->
 	<!--<PropertyGroup>
-		<Description>Openings Manager Plug-in for Revit</Description>
+		<Description>Spaces Manager Plug-in for Revit</Description>
 		<Copyright>https://eneca.ch/</Copyright>
-		<Product>EnecaOpeningsManager</Product>
+		<Product>EnecaSpacesManager</Product>
 		<Company>LLC Eneca</Company>
 		<Authors>Eneca</Authors>
-		<AssemblyVersion>2.2.0.0</AssemblyVersion>
-		<FileVersion>2.2.0.0</FileVersion>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.1.0.0</FileVersion>
 	</PropertyGroup>-->
 </Project>

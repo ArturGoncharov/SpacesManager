@@ -32,14 +32,6 @@ public sealed class MonitoringViewModel : ObservableValidator, IViewModel
 
     }
 
-
-    private ICommand _Test;
-    public ICommand Test => _Test ??= new RelayCommand(() =>
-    {
-        MessageBox.Show("What's done is done");
-            
-    });
-
     public void OnApplicationClosing()
     {
         //throw new NotImplementedException();
