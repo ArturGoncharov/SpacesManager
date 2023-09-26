@@ -1,0 +1,10 @@
+﻿<RevitAddIns>
+    <AddIn Type="Application">
+        <Name>Eneca.SpacesManager</Name>
+        <Assembly>Eneca/SpacesManager/Eneca.SpacesManager.dll</Assembly>
+        <AddInId>F19FF2C8-3DB5-498E-84F4-D65C16125E6E</AddInId>
+        <FullClassName>Eneca.SpacesManager.Application</FullClassName>
+        <VendorId>Eneca</VendorId>
+        <VendorDescription>SpacesManager</VendorDescription>
+    </AddIn>
+</RevitAddIns>
