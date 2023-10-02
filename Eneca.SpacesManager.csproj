@@ -66,9 +66,6 @@
         <PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
 	    <PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-		<Reference Include="AutoUpdater">
-		  <HintPath>AutoUpdater.dll</HintPath>
-		</Reference>
 		<Reference Include="PresentationFramework.Aero2" />
 	    <Reference Include="System.ComponentModel.DataAnnotations" />
 	    <Using Include="Nice3point.Revit.Extensions" />
@@ -76,6 +73,15 @@
 		<Resource Include="Resources\Icons\RibbonIcon16.png" />
         <Resource Include="Resources\Icons\RibbonIcon32.png" />
     </ItemGroup>
+
+
+    <ItemGroup>
+        <Reference Include="AutoUpdater">
+            <HintPath>..\..\windows-library-auto-updater\AutoUpdater\bin\Release\AutoUpdater.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+    
     <!--<Target Name="CopyFiles" AfterTargets="CoreBuild">
 		<ItemGroup>
 			<RootItem Include="$(ProjectDir)*.addin" />
