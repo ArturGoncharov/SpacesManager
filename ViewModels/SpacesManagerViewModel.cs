@@ -6,18 +6,15 @@ using Eneca.SpacesManager.Model;
 using Eneca.SpacesManager.ViewModels.Utils;
 using Eneca.SpacesManager.Views;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Eneca.SpacesManager.ViewModels;
-public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
+public sealed class SpacesManagerViewModel : ObservableObject, IViewModel
 {
     public Action<string> ShowMessage { get; set; }
 
     private ICommand _monitoringSpaces;
     private ICommand _createSpaces;
-
 
     private bool _isButtonEnabled;
 
@@ -34,22 +31,12 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
         }
     }
 
-
-
-
     private List<string> _currentLvlName;
     public List<string> CurrentLvlName
     {
-        get => _currentLvlName;
-        set
-        {
-            if (_currentLvlName == value) return;
-            _currentLvlName = value;
-            OnPropertyChanged();
-        }
+        get => _currentLvlName;  
+        set => SetProperty(ref _currentLvlName, value);
     }
-
-
 
     private string _selectedComboBoxItem;
     public string SelectedComboBoxItem
@@ -65,7 +52,7 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
 
             IsButtonEnabled = true;
 
-            DataItems = new ObservableCollection<DataItem>();
+            DataItems = new ObservableCollection<DataItemViewModel>();
             var lvlnames = new List<string>();
 
             var levelsCurrent = LoadedLevels().CurrentFileLevels;
@@ -82,11 +69,11 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
             {
                 foreach (var levelLink in levelsLink)
                 {
-                    if (Math.Round(levelCur.Elevation) == Math.Round(levelLink.Elevation))
+                    if (Math.Round(levelCur.Elevation, 2) == Math.Round(levelLink.Elevation, 2))
                     {
                         if (!string.IsNullOrEmpty(levelCur.Name))
                         {
-                            DataItems.Add(new DataItem { Choice = true, LvlLink = $"{levelLink.Name}", LvlModel = CurrentLvlName[levelsCurrent.IndexOf(levelCur)] });
+                            DataItems.Add(new DataItemViewModel { Choice = true, LvlLink = $"{levelLink.Name}", LvlModel = CurrentLvlName[levelsCurrent.IndexOf(levelCur)] });
                         }
                     }
                 }
@@ -94,12 +81,12 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
         }
     }
     
-    private ObservableCollection<DataItem> dataItems;
+    private ObservableCollection<DataItemViewModel> dataItems;
 
     /// <summary>
     /// Коллекция элементов данных.
     /// </summary>
-    public ObservableCollection<DataItem> DataItems
+    public ObservableCollection<DataItemViewModel> DataItems
     {
         get { return dataItems; }
         set
@@ -122,14 +109,14 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
         }
     }
 
-    private List<SpatialElement> changedSpaces;
+    private List<SpatialElement> _changedSpaces;
     public List<SpatialElement> ChangedSpaces
     {
-        get => changedSpaces;
+        get => _changedSpaces;
         set
         {
-            if (changedSpaces == value) return;
-            changedSpaces = value;
+            if (_changedSpaces == value) return;
+            _changedSpaces = value;
             OnPropertyChanged();
         }
     }
@@ -138,8 +125,6 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
     {
         LinkFileNames= linkFileNames;
     }
-
-
 
     public class LoadedLevelsResult
         {
@@ -151,8 +136,8 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
     {
         Document doc = RevitApi.Document;
         
-        var linkDoc = UniversalClass.GetLinkFile(SelectedComboBoxItem).GetLinkDocument();
-        var listLevelName = UniversalClass.GetLevelsNameWithRoom(SelectedComboBoxItem, linkDoc);
+        var linkDoc = RevitUtils.GetLinkFile(SelectedComboBoxItem).GetLinkDocument();
+        List<string> listLevelName = RevitUtils.GetLevelsNameWithRoom(SelectedComboBoxItem, linkDoc);
 
         List<Level> lvlLinkFile = new FilteredElementCollector(linkDoc).OfClass(typeof(Level)).Cast<Level>().ToList();
         List<Level> lvlCurrentFile = new FilteredElementCollector(doc).WhereElementIsNotElementType().OfClass(typeof(Level)).Cast<Level>().ToList();
@@ -174,19 +159,16 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
         };
     }
 
-
-    private ObservableCollection<RoomPropertyView> roomPropertiesView;
-    public ObservableCollection<RoomPropertyView> RoomPropertiesView
+    private ObservableCollection<RoomPropertyViewModel> _roomProperties;
+    public ObservableCollection<RoomPropertyViewModel> RoomProperties
     {
-        get { return roomPropertiesView; }
+        get { return _roomProperties; }
         set
         {
-            roomPropertiesView = value;
+            _roomProperties = value;
             OnPropertyChanged();
         }
     }
-
-
 
     public ICommand MonitoringSpaces => _monitoringSpaces ??= new RelayCommand(() =>
     {
@@ -198,29 +180,27 @@ public sealed class SpacesManagerViewModel : ObservableValidator, IViewModel
         Document doc = RevitApi.Document;
         List<SpatialElement> oldSpaces = new FilteredElementCollector(doc).OfClass(typeof(SpatialElement)).WhereElementIsNotElementType().Where(e => e is SpatialElement && e.Location != null).Cast<SpatialElement>().ToList();
 
-        MonitoringSpaces monitoringSpaces = new MonitoringSpaces();
+        SpaceMonitoringService monitoringSpaces = new ();
         var checkSpacesFromRooms = monitoringSpaces.CheckSpacesFromRooms(SelectedComboBoxItem, DataItems);
-        RoomPropertiesView = new ObservableCollection<RoomPropertyView>(); // Создание ObservableCollection
+        RoomProperties = new ObservableCollection<RoomPropertyViewModel>(); // Создание ObservableCollection
 
         foreach (var i in checkSpacesFromRooms.SpaceRoomDictionary)
         {
-            RoomPropertiesView.Add(new RoomPropertyView { NumberRoom = i.Key.Number, NameRoom = i.Key.get_Parameter(BuiltInParameter.ROOM_NAME).AsString(), AreaRoom = Math.Round(i.Key.Area, 2).ToString(), ChangesRoom = i.Value, LevelRoom = i.Key.Level.Name });
+            RoomProperties.Add(new RoomPropertyViewModel { NumberRoom = i.Key.Number, NameRoom = i.Key.get_Parameter(BuiltInParameter.ROOM_NAME).AsString(), AreaRoom = Math.Round(i.Key.Area, 2).ToString(), ChangesRoom = i.Value, LevelRoom = i.Key.Level.Name });
         }
         if (checkSpacesFromRooms.Spaces.Count != checkSpacesFromRooms.Rooms.Count)
         {
             ShowMessage.Invoke($"Количество Пространств {checkSpacesFromRooms.Spaces.Count} не соответсвует количеству Помещений {checkSpacesFromRooms.Rooms.Count}");
         }
 
-        monitoringViewModel.RoomPropertiesView = RoomPropertiesView;
+        monitoringViewModel.RoomProperties = RoomProperties;
         ChangedSpaces=checkSpacesFromRooms.SpaceRoomDictionary.Keys.Cast<SpatialElement>().ToList();
         newWindow.Show();
     });
 
-
     public ICommand CreateSpaces => _createSpaces??= new RelayCommand(() =>
     {
-        MessageBox.Show($"{ChangedSpaces.Count}");
-        CreateSpaces classInstance = new CreateSpaces();
+        SpaceCreationService classInstance = new();
         classInstance.StartCommand(SelectedComboBoxItem, DataItems, ChangedSpaces);
     });
 

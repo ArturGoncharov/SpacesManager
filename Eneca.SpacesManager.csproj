@@ -66,13 +66,17 @@
         <PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
 	    <PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+		<Reference Include="AutoUpdater">
+		  <HintPath>AutoUpdater.dll</HintPath>
+		</Reference>
+		<Reference Include="PresentationFramework.Aero2" />
 	    <Reference Include="System.ComponentModel.DataAnnotations" />
 	    <Using Include="Nice3point.Revit.Extensions" />
 	    <Using Include="JetBrains.Annotations" />
 		<Resource Include="Resources\Icons\RibbonIcon16.png" />
         <Resource Include="Resources\Icons\RibbonIcon32.png" />
     </ItemGroup>
-    <Target Name="CopyFiles" AfterTargets="CoreBuild">
+    <!--<Target Name="CopyFiles" AfterTargets="CoreBuild">
 		<ItemGroup>
 			<RootItem Include="$(ProjectDir)*.addin" />
             <AddinItem Include="$(TargetDir)\**\*.*" Exclude="$(TargetDir)*.pdb;$(TargetDir)*.config" />
@@ -80,7 +84,7 @@
 
 		<Copy SourceFiles="@(RootItem)" DestinationFolder="$(ProgramData)\Autodesk\Revit\Addins\$(RevitVersion)" Condition="$(Configuration.Contains('Debug'))" OverwriteReadOnlyFiles="false" />
 		<Copy SourceFiles="@(AddinItem)" DestinationFolder="$(ProgramData)\Autodesk\Revit\Addins\$(RevitVersion)\Eneca\$(SolutionName)\%(RecursiveDir)" Condition="$(Configuration.Contains('Debug'))" OverwriteReadOnlyFiles="false" />
-	</Target>
+	</Target>-->
 
 	
 

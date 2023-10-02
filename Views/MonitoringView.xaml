@@ -3,22 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Eneca.SpacesManager.Views"
+        xmlns:local="clr-namespace:Eneca.SpacesManager.Views" xmlns:viewmodels="clr-namespace:Eneca.SpacesManager.ViewModels"
         mc:Ignorable="d"
-        Title="MonitoringView" 
-        Height="700" 
+        Title="MonitoringView"
+        Height="700"
         Width="900"
+        d:DataContext="{d:DesignInstance viewmodels:MonitoringViewModel}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         Topmost="False"
-        Background="WhiteSmoke">
+        Background="#FDFDFD" Icon="/Eneca.SpacesManager;component/Resources/Icons/RibbonIcon16.png">
 
     <Grid>
         <Label Content="Помещения связанного файла" Margin="10,40,233,0" VerticalAlignment="Top" Height="25"/>
-        <DataGrid ItemsSource="{Binding RoomPropertiesView}" ToolTipService.IsEnabled="True" AutoGenerateColumns="False" SelectionUnit="FullRow" CanUserAddRows="False" RowHeight="50" Background="#FFEAEAEA" Margin="12,70,12,69" BorderBrush="Black">
+        <DataGrid ItemsSource="{Binding RoomProperties}" ToolTipService.IsEnabled="True" AutoGenerateColumns="False" SelectionUnit="FullRow" CanUserAddRows="False" RowHeight="50" Background="#FFEAEAEA" Margin="12,70,12,69" BorderBrush="Black">
             <DataGrid.Resources>
                 <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Height" Value="35"/>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
@@ -50,6 +51,8 @@
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="ToolTip" Value="{Binding ChangesRoom}" />
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
         </Style>
     </DataGridTextColumn.ElementStyle>
 </DataGridTextColumn>

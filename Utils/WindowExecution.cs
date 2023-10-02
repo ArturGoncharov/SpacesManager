@@ -20,5 +20,4 @@ public static class WindowExecution
         window.Owner = currentWindow;
         window.Show();
     }
-
 }
